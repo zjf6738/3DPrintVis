@@ -30,12 +30,13 @@ namespace Basic
         #region variable
         const int CAMERA_NUM = 4;
 
+        // 相机1，2，3，4
         private tpvCameraObj[] cameraObjs;
 
         //相机1
-        private tpvCameraObj cameraObj1;
+        //private tpvCameraObj cameraObj1;
         //相机2
-        private tpvCameraObj cameraObj2;
+        //private tpvCameraObj cameraObj2;
 
         #endregion
 
@@ -43,21 +44,32 @@ namespace Basic
         {
             InitializeComponent();
 
-            cameraObj1 = new tpvCameraObj();
-            cameraObj2 = new tpvCameraObj();
+            //cameraObj1 = new tpvCameraObj();
+            //cameraObj2 = new tpvCameraObj();
             cameraObjs = new tpvCameraObj[CAMERA_NUM];
+            for (int i = 0; i < CAMERA_NUM; i++) { cameraObjs[i] = new tpvCameraObj(); }
 
             InitCamera();
         }
 
         public tpvCameraObj CameraObj1
         {
-            get { return cameraObj1; }
+            get { return cameraObjs[0]; }
         }
 
         public tpvCameraObj CameraObj2
         {
-            get { return cameraObj2; }
+            get { return cameraObjs[1]; }
+        }
+
+        public tpvCameraObj CameraObj3
+        {
+            get { return cameraObjs[2]; }
+        }
+
+        public tpvCameraObj CameraObj4
+        {
+            get { return cameraObjs[3]; }
         }
 
         public tpvCameraObj[] CameraObjs
@@ -68,70 +80,55 @@ namespace Basic
 
         public void CaptureThreadProc1()
         {
-            CameraSdkStatus eStatus;
-            tSdkFrameHead FrameHead;
-            IntPtr uRawBuffer;//rawbuffer由SDK内部申请。应用层不要调用delete之类的释放函数
-  
-            while(CameraObj1.m_bExitCaptureThread == false)
-            {
-                //500毫秒超时,图像没捕获到前，线程会被挂起,释放CPU，所以该线程中无需调用sleep
-                eStatus = MvApi.CameraGetImageBuffer(CameraObj1.m_hCamera, out FrameHead, out uRawBuffer, 500);
-                
-                if (eStatus == CameraSdkStatus.CAMERA_STATUS_SUCCESS)//如果是触发模式，则有可能超时
-                {
-                    //图像处理，将原始输出转换为RGB格式的位图数据，同时叠加白平衡、饱和度、LUT等ISP处理。
-                    MvApi.CameraImageProcess(CameraObj1.m_hCamera, uRawBuffer, CameraObj1.m_ImageBuffer, ref FrameHead);
-                    //叠加十字线、自动曝光窗口、白平衡窗口信息(仅叠加设置为可见状态的)。    
-                    MvApi.CameraImageOverlay(CameraObj1.m_hCamera, CameraObj1.m_ImageBuffer, ref FrameHead);
-                    //调用SDK封装好的接口，显示预览图像
-                    MvApi.CameraDisplayRGB24(CameraObj1.m_hCamera, CameraObj1.m_ImageBuffer, ref FrameHead);
-                    //成功调用CameraGetImageBuffer后必须释放，下次才能继续调用CameraGetImageBuffer捕获图像。
-                    MvApi.CameraReleaseImageBuffer(CameraObj1.m_hCamera,uRawBuffer);
-
-                    if (FrameHead.iWidth != CameraObj1.m_tFrameHead.iWidth || FrameHead.iHeight != CameraObj1.m_tFrameHead.iHeight)
-                    {
-                        CameraObj1.m_bEraseBk = true;
-                        CameraObj1.m_tFrameHead = FrameHead;  
-                    }
-                    CameraObj1.m_iDisplayedFrames++;
-                }
-           
-            }
-           
+            CaptureThreadProc_General(CameraObj1);
         }
 
         public void CaptureThreadProc2()
         {
+            CaptureThreadProc_General(CameraObj2);
+        }
+
+        public void CaptureThreadProc3()
+        {
+            CaptureThreadProc_General(CameraObj3);
+        }
+
+        public void CaptureThreadProc4()
+        {
+            CaptureThreadProc_General(CameraObj4);
+        }
+
+        private void CaptureThreadProc_General(tpvCameraObj cameraObj)
+        {
             CameraSdkStatus eStatus;
             tSdkFrameHead FrameHead;
-            IntPtr uRawBuffer;//rawbuffer由SDK内部申请。应用层不要调用delete之类的释放函数
+            IntPtr uRawBuffer; //rawbuffer由SDK内部申请。应用层不要调用delete之类的释放函数
 
-            while (CameraObj2.m_bExitCaptureThread == false)
+            while (cameraObj.m_bExitCaptureThread == false)
             {
                 //500毫秒超时,图像没捕获到前，线程会被挂起,释放CPU，所以该线程中无需调用sleep
-                eStatus = MvApi.CameraGetImageBuffer(CameraObj2.m_hCamera, out FrameHead, out uRawBuffer, 500);
+                eStatus = MvApi.CameraGetImageBuffer(cameraObj.m_hCamera, out FrameHead, out uRawBuffer, 500);
 
-                if (eStatus == CameraSdkStatus.CAMERA_STATUS_SUCCESS)//如果是触发模式，则有可能超时
+                if (eStatus == CameraSdkStatus.CAMERA_STATUS_SUCCESS) //如果是触发模式，则有可能超时
                 {
                     //图像处理，将原始输出转换为RGB格式的位图数据，同时叠加白平衡、饱和度、LUT等ISP处理。
-                    MvApi.CameraImageProcess(CameraObj2.m_hCamera, uRawBuffer, CameraObj2.m_ImageBuffer, ref FrameHead);
+                    MvApi.CameraImageProcess(cameraObj.m_hCamera, uRawBuffer, cameraObj.m_ImageBuffer, ref FrameHead);
                     //叠加十字线、自动曝光窗口、白平衡窗口信息(仅叠加设置为可见状态的)。    
-                    MvApi.CameraImageOverlay(CameraObj2.m_hCamera, CameraObj2.m_ImageBuffer, ref FrameHead);
+                    MvApi.CameraImageOverlay(cameraObj.m_hCamera, cameraObj.m_ImageBuffer, ref FrameHead);
                     //调用SDK封装好的接口，显示预览图像
-                    MvApi.CameraDisplayRGB24(CameraObj2.m_hCamera, CameraObj2.m_ImageBuffer, ref FrameHead);
+                    MvApi.CameraDisplayRGB24(cameraObj.m_hCamera, cameraObj.m_ImageBuffer, ref FrameHead);
                     //成功调用CameraGetImageBuffer后必须释放，下次才能继续调用CameraGetImageBuffer捕获图像。
-                    MvApi.CameraReleaseImageBuffer(CameraObj2.m_hCamera, uRawBuffer);
+                    MvApi.CameraReleaseImageBuffer(cameraObj.m_hCamera, uRawBuffer);
 
-                    if (FrameHead.iWidth != CameraObj2.m_tFrameHead.iWidth || FrameHead.iHeight != CameraObj2.m_tFrameHead.iHeight)
+                    if (FrameHead.iWidth != cameraObj.m_tFrameHead.iWidth ||
+                        FrameHead.iHeight != cameraObj.m_tFrameHead.iHeight)
                     {
-                        CameraObj1.m_bEraseBk = true;
-                        CameraObj2.m_tFrameHead = FrameHead;
+                        cameraObj.m_bEraseBk = true;
+                        cameraObj.m_tFrameHead = FrameHead;
                     }
-      
+                    cameraObj.m_iDisplayedFrames++;
                 }
-
             }
-
         }
 
         private bool InitCamera()
@@ -146,39 +143,13 @@ namespace Basic
             int iCameraCounts = (tCameraDevInfoList != null ? tCameraDevInfoList.Length : 0);
             
             // 若相机个数大于2
-            if (iCameraCounts >= 2)//此时iCameraCounts返回了实际连接的相机个数。如果大于2，则初始化前2个相机
+            if (iCameraCounts >= 4)//此时iCameraCounts返回了实际连接的相机个数。如果大于2，则初始化前2个相机
             {
                 // 获取第一个相机，并将句柄传递到m_hCamera里头
-                if (!InitSingleCamera(tCameraDevInfoList, 0, CaptureThreadProc1, PreviewBox, BtnPlay, StateLabel, "Camera 1 init error", ref cameraObj1)) return false;
-                if (!InitSingleCamera(tCameraDevInfoList, 1, CaptureThreadProc2, PreviewBox2, BtnPlay2, StateLabel2, "Camera 2 init error", ref cameraObj2)) return false;
-
-                //if (MvApi.CameraInit(ref tCameraDevInfoList[1], -1, -1, ref CameraObj2.m_hCamera) == CameraSdkStatus.CAMERA_STATUS_SUCCESS)
-                //{
-                //    //获得相机特性描述
-                //    MvApi.CameraGetCapability(CameraObj2.m_hCamera, out CameraObj2.tCameraCapability);
-
-                //    CameraObj2.m_ImageBuffer = Marshal.AllocHGlobal(CameraObj2.tCameraCapability.sResolutionRange.iWidthMax *CameraObj2.tCameraCapability.sResolutionRange.iHeightMax * 3 + 1024);
-
-                //    //初始化显示模块，使用SDK内部封装好的显示接口
-                //    MvApi.CameraDisplayInit(CameraObj2.m_hCamera, PreviewBox2.Handle);
-                //    MvApi.CameraSetDisplaySize(CameraObj2.m_hCamera, PreviewBox2.Width, PreviewBox2.Height);
-
-                //    //让SDK来根据相机的型号动态创建该相机的配置窗口。
-                //    MvApi.CameraCreateSettingPage(CameraObj2.m_hCamera, this.Handle, tCameraDevInfoList[1].acFriendlyName,/*SettingPageMsgCalBack*/null,/*m_iSettingPageMsgCallbackCtx*/(IntPtr)null, 0);
-
-                //    MvApi.CameraPlay(CameraObj2.m_hCamera);
-                //    BtnPlay2.Text = "Pause";
-
-                //    CameraObj2.m_bExitCaptureThread = false;
-                //    CameraObj2.m_tCaptureThread = new Thread(new ThreadStart(CaptureThreadProc2));
-                //    CameraObj2.m_tCaptureThread.Start();
-                //}
-                //else
-                //{
-                //    CameraObj2.m_hCamera = 0;
-                //    StateLabel.Text = "Camera 2 init error";
-                //    return false;
-                //}
+                if (!InitSingleCamera(tCameraDevInfoList, 0, CaptureThreadProc1, PreviewBox, BtnPlay, StateLabel, "Camera 1 init error", ref cameraObjs[0])) return false;
+                if (!InitSingleCamera(tCameraDevInfoList, 1, CaptureThreadProc2, PreviewBox2, BtnPlay2, StateLabel2, "Camera 2 init error", ref cameraObjs[1])) return false;
+                if (!InitSingleCamera(tCameraDevInfoList, 2, CaptureThreadProc3, PreviewBox3, BtnPlay3, StateLabel3, "Camera 3 init error", ref cameraObjs[2])) return false;
+                if (!InitSingleCamera(tCameraDevInfoList, 3, CaptureThreadProc4, PreviewBox4, BtnPlay4, StateLabel4, "Camera 4 init error", ref cameraObjs[3])) return false;
 
                 return true;
             }
@@ -257,49 +228,6 @@ namespace Basic
             }
         }
 
-        private void BasicForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //相机1反初始化
-            if (CameraObj1.m_tCaptureThread != null)
-            {
-                CameraObj1.m_bExitCaptureThread = true;
-                CameraObj1.m_tCaptureThread.Join();
-                CameraObj1.m_tCaptureThread = null;
-            }
-
-            if (CameraObj1.m_hCamera != 0)
-            {
-                MvApi.CameraUnInit(CameraObj1.m_hCamera);
-                CameraObj1.m_hCamera = 0;
-            }
-
-            if (CameraObj1.m_ImageBuffer != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(CameraObj1.m_ImageBuffer);
-                CameraObj1.m_ImageBuffer = IntPtr.Zero;
-            }
-
-            //相机2反初始化
-            if (CameraObj2.m_tCaptureThread != null)
-            {
-                CameraObj2.m_bExitCaptureThread = true;
-                CameraObj2.m_tCaptureThread.Join();
-                CameraObj2.m_tCaptureThread = null;
-            }
-
-            if (CameraObj2.m_hCamera != 0)
-            {
-                MvApi.CameraUnInit(CameraObj2.m_hCamera);
-                CameraObj2.m_hCamera = 0;
-            }
-
-            if (CameraObj2.m_ImageBuffer != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(CameraObj2.m_ImageBuffer);
-                CameraObj2.m_ImageBuffer = IntPtr.Zero;
-            } 
-        }
-
         private void BtnSettings_Click(object sender, EventArgs e)
         {
             if (CameraObj1.m_hCamera > 0)
@@ -307,6 +235,31 @@ namespace Basic
                 MvApi.CameraShowSettingPage(CameraObj1.m_hCamera, 1);//1 show ; 0 hide
             }
         }
+
+        private void BtnPlay2_Click(object sender, EventArgs e)
+        {
+            if (CameraObj2.m_hCamera > 0)
+            {
+                if (BtnPlay2.Text == "Play")
+                {
+                    MvApi.CameraPlay(CameraObj2.m_hCamera);
+                    BtnPlay2.Text = "Pause";
+                }
+                else
+                {
+                    MvApi.CameraPause(CameraObj2.m_hCamera);
+                    BtnPlay2.Text = "Play";
+                }
+            }
+        }
+        private void BtnSettings2_Click(object sender, EventArgs e)
+        {
+            if (CameraObj2.m_hCamera > 0)
+            {
+                MvApi.CameraShowSettingPage(CameraObj2.m_hCamera, 1);//1 show ; 0 hide
+            }
+        }
+
 
         //1秒更新一次视频信息
         private void timer1_Tick(object sender, EventArgs e)
@@ -346,30 +299,75 @@ namespace Basic
 
         }
 
-        private void BtnSettings2_Click(object sender, EventArgs e)
+        private void BasicForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (CameraObj2.m_hCamera > 0)
+            for (int i = 0; i < CAMERA_NUM; i++)
             {
-                MvApi.CameraShowSettingPage(CameraObj2.m_hCamera, 1);//1 show ; 0 hide
+                tpvCameraObj cameraObj = cameraObjs[i];
+
+                //相机1反初始化
+                if (cameraObj.m_tCaptureThread != null)
+                {
+                    cameraObj.m_bExitCaptureThread = true;
+                    cameraObj.m_tCaptureThread.Join();
+                    cameraObj.m_tCaptureThread = null;
+                }
+
+                if (cameraObj.m_hCamera != 0)
+                {
+                    MvApi.CameraUnInit(cameraObj.m_hCamera);
+                    cameraObj.m_hCamera = 0;
+                }
+
+                if (cameraObj.m_ImageBuffer != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(cameraObj.m_ImageBuffer);
+                    cameraObj.m_ImageBuffer = IntPtr.Zero;
+                }
             }
+
+            ////相机1反初始化
+            //if (CameraObj1.m_tCaptureThread != null)
+            //{
+            //    CameraObj1.m_bExitCaptureThread = true;
+            //    CameraObj1.m_tCaptureThread.Join();
+            //    CameraObj1.m_tCaptureThread = null;
+            //}
+
+            //if (CameraObj1.m_hCamera != 0)
+            //{
+            //    MvApi.CameraUnInit(CameraObj1.m_hCamera);
+            //    CameraObj1.m_hCamera = 0;
+            //}
+
+            //if (CameraObj1.m_ImageBuffer != IntPtr.Zero)
+            //{
+            //    Marshal.FreeHGlobal(CameraObj1.m_ImageBuffer);
+            //    CameraObj1.m_ImageBuffer = IntPtr.Zero;
+            //}
+
+            ////相机2反初始化
+            //if (CameraObj2.m_tCaptureThread != null)
+            //{
+            //    CameraObj2.m_bExitCaptureThread = true;
+            //    CameraObj2.m_tCaptureThread.Join();
+            //    CameraObj2.m_tCaptureThread = null;
+            //}
+
+            //if (CameraObj2.m_hCamera != 0)
+            //{
+            //    MvApi.CameraUnInit(CameraObj2.m_hCamera);
+            //    CameraObj2.m_hCamera = 0;
+            //}
+
+            //if (CameraObj2.m_ImageBuffer != IntPtr.Zero)
+            //{
+            //    Marshal.FreeHGlobal(CameraObj2.m_ImageBuffer);
+            //    CameraObj2.m_ImageBuffer = IntPtr.Zero;
+            //}
         }
 
-        private void BtnPlay2_Click(object sender, EventArgs e)
-        {
-            if (CameraObj2.m_hCamera > 0)
-            {
-                if (BtnPlay2.Text == "Play")
-                {
-                    MvApi.CameraPlay(CameraObj2.m_hCamera);
-                    BtnPlay2.Text = "Pause";
-                }
-                else
-                {
-                    MvApi.CameraPause(CameraObj2.m_hCamera);
-                    BtnPlay2.Text = "Play";
-                }
-            }
-        }
+
 
     }
 }
