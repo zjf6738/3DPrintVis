@@ -28,34 +28,42 @@ namespace Basic
         
 
         #region variable
+        const int CAMERA_NUM = 4;
+
+        private tpvCameraObj[] cameraObjs;
 
         //相机1
-        protected CameraHandle m_hCamera1 = 0;             // 句柄
-        protected IntPtr       m_ImageBuffer1;             // 预览通道RGB图像缓存
-        protected tSdkCameraCapbility tCameraCapability1;  // 相机特性描述
-        protected int          m_iDisplayedFrames = 0;    //已经显示的总帧数
-        protected IntPtr       m_iCaptureCallbackCtx1;     //图像回调函数的上下文参数
-        protected Thread       m_tCaptureThread1;          //图像抓取线程
-        protected bool         m_bExitCaptureThread1 = false;//采用线程采集时，让线程退出的标志
-        protected tSdkFrameHead m_tFrameHead1;
-        protected bool          m_bEraseBk = false;
-
+        private tpvCameraObj cameraObj1;
         //相机2
-        protected CameraHandle m_hCamera2 = 0;             // 句柄
-        protected IntPtr m_ImageBuffer2;             // 预览通道RGB图像缓存
-        protected tSdkCameraCapbility tCameraCapability2;  // 相机特性描述
-        protected IntPtr m_iCaptureCallbackCtx2;     //图像回调函数的上下文参数
-        protected Thread m_tCaptureThread2;          //图像抓取线程
-        protected bool m_bExitCaptureThread2 = false;//采用线程采集时，让线程退出的标志
-        protected tSdkFrameHead m_tFrameHead2;
-      
+        private tpvCameraObj cameraObj2;
+
         #endregion
 
         public BasicForm()
         {
             InitializeComponent();
 
+            cameraObj1 = new tpvCameraObj();
+            cameraObj2 = new tpvCameraObj();
+            cameraObjs = new tpvCameraObj[CAMERA_NUM];
+
             InitCamera();
+        }
+
+        public tpvCameraObj CameraObj1
+        {
+            get { return cameraObj1; }
+        }
+
+        public tpvCameraObj CameraObj2
+        {
+            get { return cameraObj2; }
+        }
+
+        public tpvCameraObj[] CameraObjs
+        {
+            get { return cameraObjs; }
+            set { cameraObjs = value; }
         }
 
         public void CaptureThreadProc1()
@@ -64,28 +72,28 @@ namespace Basic
             tSdkFrameHead FrameHead;
             IntPtr uRawBuffer;//rawbuffer由SDK内部申请。应用层不要调用delete之类的释放函数
   
-            while(m_bExitCaptureThread1 == false)
+            while(CameraObj1.m_bExitCaptureThread == false)
             {
                 //500毫秒超时,图像没捕获到前，线程会被挂起,释放CPU，所以该线程中无需调用sleep
-                eStatus = MvApi.CameraGetImageBuffer(m_hCamera1, out FrameHead, out uRawBuffer, 500);
+                eStatus = MvApi.CameraGetImageBuffer(CameraObj1.m_hCamera, out FrameHead, out uRawBuffer, 500);
                 
                 if (eStatus == CameraSdkStatus.CAMERA_STATUS_SUCCESS)//如果是触发模式，则有可能超时
                 {
                     //图像处理，将原始输出转换为RGB格式的位图数据，同时叠加白平衡、饱和度、LUT等ISP处理。
-                    MvApi.CameraImageProcess(m_hCamera1, uRawBuffer, m_ImageBuffer1, ref FrameHead);
+                    MvApi.CameraImageProcess(CameraObj1.m_hCamera, uRawBuffer, CameraObj1.m_ImageBuffer, ref FrameHead);
                     //叠加十字线、自动曝光窗口、白平衡窗口信息(仅叠加设置为可见状态的)。    
-                    MvApi.CameraImageOverlay(m_hCamera1, m_ImageBuffer1, ref FrameHead);
+                    MvApi.CameraImageOverlay(CameraObj1.m_hCamera, CameraObj1.m_ImageBuffer, ref FrameHead);
                     //调用SDK封装好的接口，显示预览图像
-                    MvApi.CameraDisplayRGB24(m_hCamera1, m_ImageBuffer1, ref FrameHead);
+                    MvApi.CameraDisplayRGB24(CameraObj1.m_hCamera, CameraObj1.m_ImageBuffer, ref FrameHead);
                     //成功调用CameraGetImageBuffer后必须释放，下次才能继续调用CameraGetImageBuffer捕获图像。
-                    MvApi.CameraReleaseImageBuffer(m_hCamera1,uRawBuffer);
+                    MvApi.CameraReleaseImageBuffer(CameraObj1.m_hCamera,uRawBuffer);
 
-                    if (FrameHead.iWidth != m_tFrameHead1.iWidth || FrameHead.iHeight != m_tFrameHead1.iHeight)
+                    if (FrameHead.iWidth != CameraObj1.m_tFrameHead.iWidth || FrameHead.iHeight != CameraObj1.m_tFrameHead.iHeight)
                     {
-                        m_bEraseBk = true;
-                        m_tFrameHead1 = FrameHead;  
+                        CameraObj1.m_bEraseBk = true;
+                        CameraObj1.m_tFrameHead = FrameHead;  
                     }
-                    m_iDisplayedFrames++;
+                    CameraObj1.m_iDisplayedFrames++;
                 }
            
             }
@@ -98,26 +106,26 @@ namespace Basic
             tSdkFrameHead FrameHead;
             IntPtr uRawBuffer;//rawbuffer由SDK内部申请。应用层不要调用delete之类的释放函数
 
-            while (m_bExitCaptureThread2 == false)
+            while (CameraObj2.m_bExitCaptureThread == false)
             {
                 //500毫秒超时,图像没捕获到前，线程会被挂起,释放CPU，所以该线程中无需调用sleep
-                eStatus = MvApi.CameraGetImageBuffer(m_hCamera2, out FrameHead, out uRawBuffer, 500);
+                eStatus = MvApi.CameraGetImageBuffer(CameraObj2.m_hCamera, out FrameHead, out uRawBuffer, 500);
 
                 if (eStatus == CameraSdkStatus.CAMERA_STATUS_SUCCESS)//如果是触发模式，则有可能超时
                 {
                     //图像处理，将原始输出转换为RGB格式的位图数据，同时叠加白平衡、饱和度、LUT等ISP处理。
-                    MvApi.CameraImageProcess(m_hCamera2, uRawBuffer, m_ImageBuffer2, ref FrameHead);
+                    MvApi.CameraImageProcess(CameraObj2.m_hCamera, uRawBuffer, CameraObj2.m_ImageBuffer, ref FrameHead);
                     //叠加十字线、自动曝光窗口、白平衡窗口信息(仅叠加设置为可见状态的)。    
-                    MvApi.CameraImageOverlay(m_hCamera2, m_ImageBuffer2, ref FrameHead);
+                    MvApi.CameraImageOverlay(CameraObj2.m_hCamera, CameraObj2.m_ImageBuffer, ref FrameHead);
                     //调用SDK封装好的接口，显示预览图像
-                    MvApi.CameraDisplayRGB24(m_hCamera2, m_ImageBuffer2, ref FrameHead);
+                    MvApi.CameraDisplayRGB24(CameraObj2.m_hCamera, CameraObj2.m_ImageBuffer, ref FrameHead);
                     //成功调用CameraGetImageBuffer后必须释放，下次才能继续调用CameraGetImageBuffer捕获图像。
-                    MvApi.CameraReleaseImageBuffer(m_hCamera2, uRawBuffer);
+                    MvApi.CameraReleaseImageBuffer(CameraObj2.m_hCamera, uRawBuffer);
 
-                    if (FrameHead.iWidth != m_tFrameHead2.iWidth || FrameHead.iHeight != m_tFrameHead2.iHeight)
+                    if (FrameHead.iWidth != CameraObj2.m_tFrameHead.iWidth || FrameHead.iHeight != CameraObj2.m_tFrameHead.iHeight)
                     {
-                        m_bEraseBk = true;
-                        m_tFrameHead2 = FrameHead;
+                        CameraObj1.m_bEraseBk = true;
+                        CameraObj2.m_tFrameHead = FrameHead;
                     }
       
                 }
@@ -128,92 +136,122 @@ namespace Basic
 
         private bool InitCamera()
         {
+            // sdk状态
             CameraSdkStatus status;
+            // 设备信息
             tSdkCameraDevInfo[] tCameraDevInfoList;
-
+            // 获取所有的设备信息
             status = MvApi.CameraEnumerateDevice(out tCameraDevInfoList);
+            // 设备的数量
             int iCameraCounts = (tCameraDevInfoList != null ? tCameraDevInfoList.Length : 0);
+            
+            // 若相机个数大于2
             if (iCameraCounts >= 2)//此时iCameraCounts返回了实际连接的相机个数。如果大于2，则初始化前2个相机
             {
-                if (MvApi.CameraInit(ref tCameraDevInfoList[0], -1, -1, ref m_hCamera1) == CameraSdkStatus.CAMERA_STATUS_SUCCESS)
-                {
-                    //获得相机特性描述
-                    MvApi.CameraGetCapability(m_hCamera1, out tCameraCapability1);
+                // 获取第一个相机，并将句柄传递到m_hCamera里头
+                if (!InitSingleCamera(tCameraDevInfoList, 0, CaptureThreadProc1, PreviewBox, BtnPlay, StateLabel, "Camera 1 init error", ref cameraObj1)) return false;
+                if (!InitSingleCamera(tCameraDevInfoList, 1, CaptureThreadProc2, PreviewBox2, BtnPlay2, StateLabel2, "Camera 2 init error", ref cameraObj2)) return false;
 
-                    m_ImageBuffer1 = Marshal.AllocHGlobal(tCameraCapability1.sResolutionRange.iWidthMax * tCameraCapability1.sResolutionRange.iHeightMax * 3 + 1024);
+                //if (MvApi.CameraInit(ref tCameraDevInfoList[1], -1, -1, ref CameraObj2.m_hCamera) == CameraSdkStatus.CAMERA_STATUS_SUCCESS)
+                //{
+                //    //获得相机特性描述
+                //    MvApi.CameraGetCapability(CameraObj2.m_hCamera, out CameraObj2.tCameraCapability);
 
-                    //初始化显示模块，使用SDK内部封装好的显示接口
-                    MvApi.CameraDisplayInit(m_hCamera1, PreviewBox.Handle);
-                    MvApi.CameraSetDisplaySize(m_hCamera1, PreviewBox.Width, PreviewBox.Height);
+                //    CameraObj2.m_ImageBuffer = Marshal.AllocHGlobal(CameraObj2.tCameraCapability.sResolutionRange.iWidthMax *CameraObj2.tCameraCapability.sResolutionRange.iHeightMax * 3 + 1024);
 
-                    //让SDK来根据相机的型号动态创建该相机的配置窗口。
-                    MvApi.CameraCreateSettingPage(m_hCamera1, this.Handle, tCameraDevInfoList[0].acFriendlyName,/*SettingPageMsgCalBack*/null,/*m_iSettingPageMsgCallbackCtx*/(IntPtr)null, 0);
+                //    //初始化显示模块，使用SDK内部封装好的显示接口
+                //    MvApi.CameraDisplayInit(CameraObj2.m_hCamera, PreviewBox2.Handle);
+                //    MvApi.CameraSetDisplaySize(CameraObj2.m_hCamera, PreviewBox2.Width, PreviewBox2.Height);
 
-                    MvApi.CameraPlay(m_hCamera1);
-                    BtnPlay.Text = "Pause";
+                //    //让SDK来根据相机的型号动态创建该相机的配置窗口。
+                //    MvApi.CameraCreateSettingPage(CameraObj2.m_hCamera, this.Handle, tCameraDevInfoList[1].acFriendlyName,/*SettingPageMsgCalBack*/null,/*m_iSettingPageMsgCallbackCtx*/(IntPtr)null, 0);
 
-                    //两种方式来获得预览图像，设置回调函数或者使用定时器或者独立线程的方式，
-                    //主动调用CameraGetImageBuffer接口来抓图。
-                    //本例中仅演示了两种的方式,注意，两种方式也可以同时使用，但是在回调函数中，
-                    //不要使用CameraGetImageBuffer，否则会造成死锁现象。
+                //    MvApi.CameraPlay(CameraObj2.m_hCamera);
+                //    BtnPlay2.Text = "Pause";
 
-                    m_bExitCaptureThread1 = false;
-                    m_tCaptureThread1 = new Thread(new ThreadStart(CaptureThreadProc1));
-                    m_tCaptureThread1.Start();
-
-                }
-                else
-                {
-                    m_hCamera1 = 0;
-                    StateLabel.Text = "Camera 1 init error";
-                    return false;
-                }
-
-                if (MvApi.CameraInit(ref tCameraDevInfoList[1], -1, -1, ref m_hCamera2) == CameraSdkStatus.CAMERA_STATUS_SUCCESS)
-                {
-                    //获得相机特性描述
-                    MvApi.CameraGetCapability(m_hCamera2, out tCameraCapability2);
-
-                    m_ImageBuffer2 = Marshal.AllocHGlobal(tCameraCapability2.sResolutionRange.iWidthMax * tCameraCapability2.sResolutionRange.iHeightMax * 3 + 1024);
-
-                    //初始化显示模块，使用SDK内部封装好的显示接口
-                    MvApi.CameraDisplayInit(m_hCamera2, PreviewBox2.Handle);
-                    MvApi.CameraSetDisplaySize(m_hCamera2, PreviewBox2.Width, PreviewBox2.Height);
-
-                    //让SDK来根据相机的型号动态创建该相机的配置窗口。
-                    MvApi.CameraCreateSettingPage(m_hCamera2, this.Handle, tCameraDevInfoList[1].acFriendlyName,/*SettingPageMsgCalBack*/null,/*m_iSettingPageMsgCallbackCtx*/(IntPtr)null, 0);
-
-                    MvApi.CameraPlay(m_hCamera2);
-                    BtnPlay2.Text = "Pause";
-
-                    m_bExitCaptureThread2 = false;
-                    m_tCaptureThread2 = new Thread(new ThreadStart(CaptureThreadProc2));
-                    m_tCaptureThread2.Start();
-                }
-                else
-                {
-                    m_hCamera2 = 0;
-                    StateLabel.Text = "Camera 2 init error";
-                    return false;
-                }
+                //    CameraObj2.m_bExitCaptureThread = false;
+                //    CameraObj2.m_tCaptureThread = new Thread(new ThreadStart(CaptureThreadProc2));
+                //    CameraObj2.m_tCaptureThread.Start();
+                //}
+                //else
+                //{
+                //    CameraObj2.m_hCamera = 0;
+                //    StateLabel.Text = "Camera 2 init error";
+                //    return false;
+                //}
 
                 return true;
             }
             return false;
         }
 
+        /// <summary>
+        /// 根据设备列表，初始化单个相机
+        /// </summary>
+        /// <param name="tCameraDevInfoList">相机设备列表</param>
+        /// <param name="cameraDevID">第i个相机</param>
+        /// <param name="PreviewBox">相机对应的PictureBox</param>
+        /// <param name="CaptureThreadProc1">相机对应的线程处理函数</param>
+        /// <param name="cameraObj">相机对象</param>
+        /// <returns></returns>
+        protected bool InitSingleCamera(tSdkCameraDevInfo[] tCameraDevInfoList, int cameraDevID,                                        
+                                        ThreadStart CaptureThreadProc1,
+                                        PictureBox PreviewBox, Button BtnPlay, Label StateLabel,
+                                        string errMsg,
+                                        ref  tpvCameraObj cameraObj)
+        {
+
+
+            if (MvApi.CameraInit(ref tCameraDevInfoList[cameraDevID], -1, -1, ref cameraObj.m_hCamera) == CameraSdkStatus.CAMERA_STATUS_SUCCESS)
+            {
+                //获得相机特性描述
+                MvApi.CameraGetCapability(cameraObj.m_hCamera, out cameraObj.tCameraCapability);
+
+                cameraObj.m_ImageBuffer = Marshal.AllocHGlobal(cameraObj.tCameraCapability.sResolutionRange.iWidthMax*
+                                         cameraObj.tCameraCapability.sResolutionRange.iHeightMax*3 + 1024);
+
+                //初始化显示模块，使用SDK内部封装好的显示接口
+                MvApi.CameraDisplayInit(cameraObj.m_hCamera, PreviewBox.Handle);
+                MvApi.CameraSetDisplaySize(cameraObj.m_hCamera, PreviewBox.Width, PreviewBox.Height);
+
+                //让SDK来根据相机的型号动态创建该相机的配置窗口。
+                MvApi.CameraCreateSettingPage(cameraObj.m_hCamera, this.Handle, tCameraDevInfoList[cameraDevID].acFriendlyName,
+                    /*SettingPageMsgCalBack*/null, /*m_iSettingPageMsgCallbackCtx*/(IntPtr) null, 0);
+
+                MvApi.CameraPlay(cameraObj.m_hCamera);
+                BtnPlay.Text = "Pause";
+
+                //两种方式来获得预览图像，设置回调函数或者使用定时器或者独立线程的方式，
+                //主动调用CameraGetImageBuffer接口来抓图。
+                //本例中仅演示了两种的方式,注意，两种方式也可以同时使用，但是在回调函数中，
+                //不要使用CameraGetImageBuffer，否则会造成死锁现象。
+
+                cameraObj.m_bExitCaptureThread = false;
+                cameraObj.m_tCaptureThread = new Thread(new ThreadStart(CaptureThreadProc1));
+                cameraObj.m_tCaptureThread.Start();
+            }
+            else
+            {
+                cameraObj.m_hCamera = 0;
+                //StateLabel.Text = "Camera 1 init error";
+                StateLabel.Text =  errMsg;
+                return false;
+            }
+            return true;
+        }
+
         private void BtnPlay_Click(object sender, EventArgs e)
         {
-            if (m_hCamera1 != 0)
+            if (CameraObj1.m_hCamera != 0)
             {
                 if (BtnPlay.Text == "Play")
                 {
-                    MvApi.CameraPlay(m_hCamera1);
+                    MvApi.CameraPlay(CameraObj1.m_hCamera);
                     BtnPlay.Text = "Pause";
                 }
                 else
                 {
-                    MvApi.CameraPause(m_hCamera1);
+                    MvApi.CameraPause(CameraObj1.m_hCamera);
                     BtnPlay.Text = "Play";
                 }
             }
@@ -222,51 +260,51 @@ namespace Basic
         private void BasicForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //相机1反初始化
-            if (m_tCaptureThread1 != null)
+            if (CameraObj1.m_tCaptureThread != null)
             {
-                m_bExitCaptureThread1 = true;
-                m_tCaptureThread1.Join();
-                m_tCaptureThread1 = null;
+                CameraObj1.m_bExitCaptureThread = true;
+                CameraObj1.m_tCaptureThread.Join();
+                CameraObj1.m_tCaptureThread = null;
             }
 
-            if (m_hCamera1 != 0)
+            if (CameraObj1.m_hCamera != 0)
             {
-                MvApi.CameraUnInit(m_hCamera1);
-                m_hCamera1 = 0;
+                MvApi.CameraUnInit(CameraObj1.m_hCamera);
+                CameraObj1.m_hCamera = 0;
             }
 
-            if (m_ImageBuffer1 != IntPtr.Zero)
+            if (CameraObj1.m_ImageBuffer != IntPtr.Zero)
             {
-                Marshal.FreeHGlobal(m_ImageBuffer1);
-                m_ImageBuffer1 = IntPtr.Zero;
+                Marshal.FreeHGlobal(CameraObj1.m_ImageBuffer);
+                CameraObj1.m_ImageBuffer = IntPtr.Zero;
             }
 
             //相机2反初始化
-            if (m_tCaptureThread2 != null)
+            if (CameraObj2.m_tCaptureThread != null)
             {
-                m_bExitCaptureThread2 = true;
-                m_tCaptureThread2.Join();
-                m_tCaptureThread2 = null;
+                CameraObj2.m_bExitCaptureThread = true;
+                CameraObj2.m_tCaptureThread.Join();
+                CameraObj2.m_tCaptureThread = null;
             }
 
-            if (m_hCamera2 != 0)
+            if (CameraObj2.m_hCamera != 0)
             {
-                MvApi.CameraUnInit(m_hCamera2);
-                m_hCamera2 = 0;
+                MvApi.CameraUnInit(CameraObj2.m_hCamera);
+                CameraObj2.m_hCamera = 0;
             }
 
-            if (m_ImageBuffer2 != IntPtr.Zero)
+            if (CameraObj2.m_ImageBuffer != IntPtr.Zero)
             {
-                Marshal.FreeHGlobal(m_ImageBuffer2);
-                m_ImageBuffer2 = IntPtr.Zero;
+                Marshal.FreeHGlobal(CameraObj2.m_ImageBuffer);
+                CameraObj2.m_ImageBuffer = IntPtr.Zero;
             } 
         }
 
         private void BtnSettings_Click(object sender, EventArgs e)
         {
-            if (m_hCamera1 > 0)
+            if (CameraObj1.m_hCamera > 0)
             {
-                MvApi.CameraShowSettingPage(m_hCamera1, 1);//1 show ; 0 hide
+                MvApi.CameraShowSettingPage(CameraObj1.m_hCamera, 1);//1 show ; 0 hide
             }
         }
 
@@ -274,15 +312,15 @@ namespace Basic
         private void timer1_Tick(object sender, EventArgs e)
         {
             tSdkFrameStatistic tFrameStatistic;
-            if (m_hCamera1 > 0)
+            if (CameraObj1.m_hCamera > 0)
             {
                 //获得SDK中图像帧统计信息，捕获帧、错误帧等。
-                MvApi.CameraGetFrameStatistic(m_hCamera1, out tFrameStatistic);
+                MvApi.CameraGetFrameStatistic(CameraObj1.m_hCamera, out tFrameStatistic);
                 //显示帧率有应用程序自己记录。
-                string sFrameInfomation = String.Format("| Resolution:{0}*{1} | Display frames{2} | Capture frames{3} |", m_tFrameHead1.iWidth, m_tFrameHead1.iHeight, m_iDisplayedFrames, tFrameStatistic.iCapture);
+                string sFrameInfomation = String.Format("| Resolution:{0}*{1} | Display frames{2} | Capture frames{3} |", CameraObj1.m_tFrameHead.iWidth, CameraObj1.m_tFrameHead.iHeight, CameraObj1.m_iDisplayedFrames, tFrameStatistic.iCapture);
                 StateLabel.Text = sFrameInfomation;
 
-                sFrameInfomation = String.Format("| Resolution:{0}*{1} |", m_tFrameHead2.iWidth, m_tFrameHead2.iHeight);
+                sFrameInfomation = String.Format("| Resolution:{0}*{1} |", CameraObj2.m_tFrameHead.iWidth, CameraObj2.m_tFrameHead.iHeight);
                 StateLabel2.Text = sFrameInfomation;
                 
             }
@@ -296,9 +334,9 @@ namespace Basic
         private void timer2_Tick(object sender, EventArgs e)
         {
             //切换分辨率后，擦除一次背景
-            if (m_bEraseBk == true)
+            if (CameraObj1.m_bEraseBk == true)
             {
-                m_bEraseBk = false;
+                CameraObj1.m_bEraseBk = false;
                 PreviewBox.Refresh();
             }
         }
@@ -310,24 +348,24 @@ namespace Basic
 
         private void BtnSettings2_Click(object sender, EventArgs e)
         {
-            if (m_hCamera2 > 0)
+            if (CameraObj2.m_hCamera > 0)
             {
-                MvApi.CameraShowSettingPage(m_hCamera2, 1);//1 show ; 0 hide
+                MvApi.CameraShowSettingPage(CameraObj2.m_hCamera, 1);//1 show ; 0 hide
             }
         }
 
         private void BtnPlay2_Click(object sender, EventArgs e)
         {
-            if (m_hCamera2 > 0)
+            if (CameraObj2.m_hCamera > 0)
             {
                 if (BtnPlay2.Text == "Play")
                 {
-                    MvApi.CameraPlay(m_hCamera2);
+                    MvApi.CameraPlay(CameraObj2.m_hCamera);
                     BtnPlay2.Text = "Pause";
                 }
                 else
                 {
-                    MvApi.CameraPause(m_hCamera2);
+                    MvApi.CameraPause(CameraObj2.m_hCamera);
                     BtnPlay2.Text = "Play";
                 }
             }
