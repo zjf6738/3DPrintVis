@@ -16,10 +16,13 @@ namespace FirstStepMulti
     public partial class Form1 : Form
     {
         #region variable
-        protected IntPtr[] m_Grabber = new IntPtr[4];
-        protected CameraHandle[] m_hCamera = new CameraHandle[4];
+
+        const int CAMERA_NUM = 4;
+
+        protected IntPtr[] m_Grabber = new IntPtr[CAMERA_NUM];
+        protected CameraHandle[] m_hCamera = new CameraHandle[CAMERA_NUM];
         protected tSdkCameraDevInfo[] m_DevInfo;
-        protected pfnCameraGrabberFrameCallback m_FrameCallback;
+        protected pfnCameraGrabberFrameCallback[] m_FrameCallback = new pfnCameraGrabberFrameCallback[CAMERA_NUM];
         protected pfnCameraGrabberSaveImageComplete m_SaveImageComplete;
         #endregion
 
@@ -33,11 +36,14 @@ namespace FirstStepMulti
         {
             InitializeComponent();
 
-            m_FrameCallback = new pfnCameraGrabberFrameCallback(CameraGrabberFrameCallback);
+            m_FrameCallback[0] = new pfnCameraGrabberFrameCallback(CameraGrabberFrameCallback0);
+            m_FrameCallback[1] = new pfnCameraGrabberFrameCallback(CameraGrabberFrameCallback1);
+            m_FrameCallback[2] = new pfnCameraGrabberFrameCallback(CameraGrabberFrameCallback2);
+            m_FrameCallback[3] = new pfnCameraGrabberFrameCallback(CameraGrabberFrameCallback3);
             m_SaveImageComplete = new pfnCameraGrabberSaveImageComplete(CameraGrabberSaveImageComplete2);
  
             MvApi.CameraEnumerateDevice(out m_DevInfo);
-            int NumDev = (m_DevInfo != null ? Math.Min(m_DevInfo.Length, 4) : 0);
+            int NumDev = (m_DevInfo != null ? Math.Min(m_DevInfo.Length, CAMERA_NUM) : 0);
 
             IntPtr[] hDispWnds = { this.DispWnd1.Handle, this.DispWnd2.Handle, this.DispWnd3.Handle, this.DispWnd4.Handle };
             for (int i = 0; i < NumDev; ++i)
@@ -47,7 +53,7 @@ namespace FirstStepMulti
                     MvApi.CameraGrabber_GetCameraHandle(m_Grabber[i], out m_hCamera[i]);
                     MvApi.CameraCreateSettingPage(m_hCamera[i], this.Handle, m_DevInfo[i].acFriendlyName, null, (IntPtr)0, 0);
 
-                    MvApi.CameraGrabber_SetRGBCallback(m_Grabber[i], m_FrameCallback, IntPtr.Zero);
+                    MvApi.CameraGrabber_SetRGBCallback(m_Grabber[i], m_FrameCallback[i], IntPtr.Zero);
                     MvApi.CameraGrabber_SetSaveImageCompleteCallback(m_Grabber[i], m_SaveImageComplete, IntPtr.Zero);
 
                     // 黑白相机设置ISP输出灰度图像
@@ -69,28 +75,62 @@ namespace FirstStepMulti
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < CAMERA_NUM; ++i)
             {
                 if (m_Grabber[i] != IntPtr.Zero)
                     MvApi.CameraGrabber_Destroy(m_Grabber[i]);
             }
         }
 
-        private void CameraGrabberFrameCallback(
+        private void CameraGrabberFrameCallback0(
             IntPtr Grabber,
             IntPtr pFrameBuffer,
             ref tSdkFrameHead pFrameHead,
             IntPtr Context)
         {
-            // 数据处理回调
-
-            // 由于黑白相机在相机打开后设置了ISP输出灰度图像
-            // 因此此处pFrameBuffer=8位灰度数据
-            // 否则会和彩色相机一样输出BGR24数据
-
-            // 彩色相机ISP默认会输出BGR24图像
-            // pFrameBuffer=BGR24数据
+            if (m_bRecording)
+            {
+                MvApi.CameraPushFrame(m_hCamera[0], pFrameBuffer, ref pFrameHead);
+            }
         }
+
+        private void CameraGrabberFrameCallback1(
+            IntPtr Grabber,
+            IntPtr pFrameBuffer,
+            ref tSdkFrameHead pFrameHead,
+            IntPtr Context)
+        {
+            if (m_bRecording)
+            {
+                MvApi.CameraPushFrame(m_hCamera[1], pFrameBuffer, ref pFrameHead);
+            }
+        }
+
+        private void CameraGrabberFrameCallback2(
+            IntPtr Grabber,
+            IntPtr pFrameBuffer,
+            ref tSdkFrameHead pFrameHead,
+            IntPtr Context)
+        {
+            if (m_bRecording)
+            {
+                MvApi.CameraPushFrame(m_hCamera[2], pFrameBuffer, ref pFrameHead);
+            }
+        }
+
+        private void CameraGrabberFrameCallback3(
+            IntPtr Grabber,
+            IntPtr pFrameBuffer,
+            ref tSdkFrameHead pFrameHead,
+            IntPtr Context)
+        {
+            if (m_bRecording)
+            {
+                MvApi.CameraPushFrame(m_hCamera[3], pFrameBuffer, ref pFrameHead);
+            }
+        }
+
+
 
         /// <summary>
         /// 保存图片的回调函数
@@ -144,7 +184,7 @@ namespace FirstStepMulti
                 m_saveFilenames += filename + "\r\n";
                 m_countFiles ++;
             }
-            if (m_countFiles == 4)
+            if (m_countFiles == CAMERA_NUM)
             {
                 MessageBox.Show(m_saveFilenames);
             }
@@ -254,7 +294,7 @@ namespace FirstStepMulti
         private void timer1_Tick(object sender, EventArgs e)
         {
             Label[] Labels = { label1, label2, label3, label4 };
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < CAMERA_NUM; ++i)
             {
                 if (m_Grabber[i] != IntPtr.Zero)
                 {
@@ -272,7 +312,7 @@ namespace FirstStepMulti
             m_saveFilenames = "";
             m_countFiles = 0;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < CAMERA_NUM; i++)
             {
                 if (m_Grabber[i] != IntPtr.Zero)
                     MvApi.CameraGrabber_SaveImageAsync(m_Grabber[i]);
@@ -282,8 +322,10 @@ namespace FirstStepMulti
 
         private void buttonBeginRecord_Click(object sender, EventArgs e)
         {
+            //int CAMERA_NUM = 2;
+
             if (m_Grabber == null) return;
-            for (int i = 0; i < 4; i++){ if (m_Grabber[i] == IntPtr.Zero) return;}
+            for (int i = 0; i < CAMERA_NUM; i++){ if (m_Grabber[i] == IntPtr.Zero) return;}
 
             
             if (m_bRecording)
@@ -291,7 +333,7 @@ namespace FirstStepMulti
                 m_bRecording = false;
 
                 CameraSdkStatus status = 0;
-                for (int i = 0; i < 4; i++) { status |= MvApi.CameraStopRecord(m_hCamera[i]); }
+                for (int i = 0; i < CAMERA_NUM; i++) { status |= MvApi.CameraStopRecord(m_hCamera[i]); }
 
                 if (status == 0)
                     MessageBox.Show("录像保存成功");
@@ -303,12 +345,12 @@ namespace FirstStepMulti
             }
             else
             {
-                string[] SavePaths = new string[4];
-                for (int i = 0; i < 4; i++) { SavePaths[i] = buttonBeginRecord_GetPathName(m_Grabber[i]); }
+                string[] SavePaths = new string[CAMERA_NUM];
+                for (int i = 0; i < CAMERA_NUM; i++) { SavePaths[i] = buttonBeginRecord_GetPathName(m_Grabber[i]); }
 
                 // 压缩格式3：需要安装DivX编码器
                 CameraSdkStatus status = 0;
-                for (int i = 0; i < 4; i++) { status |= buttonBeginRecord_InitACameraRecord(m_hCamera[i], SavePaths[i]); }
+                for (int i = 0; i < CAMERA_NUM; i++) { status |= buttonBeginRecord_InitACameraRecord(m_hCamera[i], SavePaths[i]); }
 
                 if (status != 0)
                 {
@@ -328,7 +370,8 @@ namespace FirstStepMulti
             int[] FormatList = new int[] { 3, 1, 0 };
             foreach (int Fmt in FormatList)
             {
-                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 100, 30);
+                //status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 100, 30);
+                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 50, 5);
                 if (status == 0) break;
             }
             return status;

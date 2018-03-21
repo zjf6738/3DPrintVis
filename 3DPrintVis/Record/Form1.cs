@@ -132,7 +132,7 @@ namespace Record
         private CameraSdkStatus buttonBeginRecord_InitACameraRecord(CameraHandle m_hCamera,string SavePath)
         {
             CameraSdkStatus status = MVSDK.CameraSdkStatus.CAMERA_STATUS_FAILED;
-            int[] FormatList = new int[] {3, 0};
+            int[] FormatList = new int[] {3,1, 0};
             foreach (int Fmt in FormatList)
             {
                 status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 100, 30);
