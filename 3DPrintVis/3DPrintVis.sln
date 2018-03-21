@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVSDK", "MVSDK\MVSDK.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstStepMulti", "FirstStepMulti\FirstStepMulti.csproj", "{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Record", "Record\Record.csproj", "{25C8E26E-C588-476D-8CC4-0997FE012122}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,18 @@ Global
 		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|x86.ActiveCfg = Release|x86
 		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|x86.Build.0 = Release|x86
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Debug|x86.ActiveCfg = Debug|x86
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Debug|x86.Build.0 = Debug|x86
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Halcon12_release|Any CPU.ActiveCfg = Release|Any CPU
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Halcon12_release|Any CPU.Build.0 = Release|Any CPU
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Halcon12_release|x86.ActiveCfg = Release|x86
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Halcon12_release|x86.Build.0 = Release|x86
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|x86.ActiveCfg = Release|x86
+		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

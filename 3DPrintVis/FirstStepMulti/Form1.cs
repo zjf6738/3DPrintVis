@@ -24,7 +24,7 @@ namespace FirstStepMulti
         #endregion
 
         #region MyRegion
-
+        protected Boolean m_bRecording = false;
         private string m_saveFilenames = "";
         private int m_countFiles = 0;
         #endregion
@@ -278,6 +278,77 @@ namespace FirstStepMulti
                     MvApi.CameraGrabber_SaveImageAsync(m_Grabber[i]);
             }
 
+        }
+
+        private void buttonBeginRecord_Click(object sender, EventArgs e)
+        {
+            if (m_Grabber == null) return;
+            for (int i = 0; i < 4; i++){ if (m_Grabber[i] == IntPtr.Zero) return;}
+
+            
+            if (m_bRecording)
+            {
+                m_bRecording = false;
+
+                CameraSdkStatus status = 0;
+                for (int i = 0; i < 4; i++) { status |= MvApi.CameraStopRecord(m_hCamera[i]); }
+
+                if (status == 0)
+                    MessageBox.Show("录像保存成功");
+                else
+                    MessageBox.Show("录像保存失败");
+
+                this.buttonBeginRecord.Text = "开始一键录制";
+                this.Text = "录像";
+            }
+            else
+            {
+                string[] SavePaths = new string[4];
+                for (int i = 0; i < 4; i++) { SavePaths[i] = buttonBeginRecord_GetPathName(m_Grabber[i]); }
+
+                // 压缩格式3：需要安装DivX编码器
+                CameraSdkStatus status = 0;
+                for (int i = 0; i < 4; i++) { status |= buttonBeginRecord_InitACameraRecord(m_hCamera[i], SavePaths[i]); }
+
+                if (status != 0)
+                {
+                    MessageBox.Show("启动录像失败");
+                    return;
+                }
+
+                m_bRecording = true;
+                this.buttonBeginRecord.Text = "停止一键录制";
+                this.Text = "录像（录像中。。。）";
+            }
+        }
+
+        private CameraSdkStatus buttonBeginRecord_InitACameraRecord(CameraHandle m_hCamera, string SavePath)
+        {
+            CameraSdkStatus status = MVSDK.CameraSdkStatus.CAMERA_STATUS_FAILED;
+            int[] FormatList = new int[] { 3, 1, 0 };
+            foreach (int Fmt in FormatList)
+            {
+                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 100, 30);
+                if (status == 0) break;
+            }
+            return status;
+        }
+
+        private string buttonBeginRecord_GetPathName(IntPtr Grabber)
+        {
+            tSdkCameraDevInfo devInfo;
+            MvApi.CameraGrabber_GetCameraDevInfo(Grabber, out devInfo);
+
+            Encoding myEncoding = Encoding.GetEncoding("utf-8");
+            string sData = myEncoding.GetString(devInfo.acSn);
+            sData = sData.TrimEnd('\0');
+            sData = sData.Substring(0, 12);
+
+            string filename = System.IO.Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory.ToString(),
+                    string.Format("{0}-{1}-{2}.avi", System.Environment.TickCount, sData, devInfo.uInstance));
+
+            return filename;
         }
     }
 }

@@ -55,6 +55,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.buttonSnapAll = new System.Windows.Forms.Button();
+            this.buttonBeginRecord = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DispWnd1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DispWnd2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DispWnd4)).BeginInit();
@@ -297,7 +298,7 @@
             // 
             // buttonSnapAll
             // 
-            this.buttonSnapAll.Location = new System.Drawing.Point(207, 21);
+            this.buttonSnapAll.Location = new System.Drawing.Point(195, 23);
             this.buttonSnapAll.Name = "buttonSnapAll";
             this.buttonSnapAll.Size = new System.Drawing.Size(75, 23);
             this.buttonSnapAll.TabIndex = 29;
@@ -305,11 +306,22 @@
             this.buttonSnapAll.UseVisualStyleBackColor = true;
             this.buttonSnapAll.Click += new System.EventHandler(this.buttonSnapAll_Click);
             // 
+            // buttonBeginRecord
+            // 
+            this.buttonBeginRecord.Location = new System.Drawing.Point(289, 23);
+            this.buttonBeginRecord.Name = "buttonBeginRecord";
+            this.buttonBeginRecord.Size = new System.Drawing.Size(94, 23);
+            this.buttonBeginRecord.TabIndex = 30;
+            this.buttonBeginRecord.Text = "开始一键录制";
+            this.buttonBeginRecord.UseVisualStyleBackColor = true;
+            this.buttonBeginRecord.Click += new System.EventHandler(this.buttonBeginRecord_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 810);
+            this.Controls.Add(this.buttonBeginRecord);
             this.Controls.Add(this.buttonSnapAll);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -375,6 +387,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button buttonSnapAll;
+        private System.Windows.Forms.Button buttonBeginRecord;
     }
 }
 
