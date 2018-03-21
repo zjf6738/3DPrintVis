@@ -7,25 +7,48 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FourCameras", "TwoCameras\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVSDK", "MVSDK\MVSDK.csproj", "{65DB9CE0-3829-41AB-AD75-E894502E0090}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstStepMulti", "FirstStepMulti\FirstStepMulti.csproj", "{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Halcon12_release|Any CPU = Halcon12_release|Any CPU
+		Halcon12_release|x86 = Halcon12_release|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Halcon12_release|Any CPU.ActiveCfg = Release|Any CPU
 		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Halcon12_release|Any CPU.Build.0 = Release|Any CPU
+		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Halcon12_release|x86.ActiveCfg = Release|Any CPU
 		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90CFD4DB-7EFC-4848-8F9D-AA9A52785D8D}.Release|x86.ActiveCfg = Release|Any CPU
 		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Halcon12_release|Any CPU.ActiveCfg = Halcon12_release|Any CPU
 		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Halcon12_release|Any CPU.Build.0 = Halcon12_release|Any CPU
+		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Halcon12_release|x86.ActiveCfg = Halcon12_release|Any CPU
 		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65DB9CE0-3829-41AB-AD75-E894502E0090}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Debug|x86.ActiveCfg = Debug|x86
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Debug|x86.Build.0 = Debug|x86
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Halcon12_release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Halcon12_release|Any CPU.Build.0 = Release|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Halcon12_release|x86.ActiveCfg = Release|x86
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Halcon12_release|x86.Build.0 = Release|x86
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|x86.ActiveCfg = Release|x86
+		{B2E06855-037D-4E8A-B621-D3EC62BF5EEB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

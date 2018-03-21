@@ -326,45 +326,6 @@ namespace Basic
                 }
             }
 
-            ////相机1反初始化
-            //if (CameraObj1.m_tCaptureThread != null)
-            //{
-            //    CameraObj1.m_bExitCaptureThread = true;
-            //    CameraObj1.m_tCaptureThread.Join();
-            //    CameraObj1.m_tCaptureThread = null;
-            //}
-
-            //if (CameraObj1.m_hCamera != 0)
-            //{
-            //    MvApi.CameraUnInit(CameraObj1.m_hCamera);
-            //    CameraObj1.m_hCamera = 0;
-            //}
-
-            //if (CameraObj1.m_ImageBuffer != IntPtr.Zero)
-            //{
-            //    Marshal.FreeHGlobal(CameraObj1.m_ImageBuffer);
-            //    CameraObj1.m_ImageBuffer = IntPtr.Zero;
-            //}
-
-            ////相机2反初始化
-            //if (CameraObj2.m_tCaptureThread != null)
-            //{
-            //    CameraObj2.m_bExitCaptureThread = true;
-            //    CameraObj2.m_tCaptureThread.Join();
-            //    CameraObj2.m_tCaptureThread = null;
-            //}
-
-            //if (CameraObj2.m_hCamera != 0)
-            //{
-            //    MvApi.CameraUnInit(CameraObj2.m_hCamera);
-            //    CameraObj2.m_hCamera = 0;
-            //}
-
-            //if (CameraObj2.m_ImageBuffer != IntPtr.Zero)
-            //{
-            //    Marshal.FreeHGlobal(CameraObj2.m_ImageBuffer);
-            //    CameraObj2.m_ImageBuffer = IntPtr.Zero;
-            //}
         }
 
 
