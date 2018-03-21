@@ -23,6 +23,12 @@ namespace FirstStepMulti
         protected pfnCameraGrabberSaveImageComplete m_SaveImageComplete;
         #endregion
 
+        #region MyRegion
+
+        private string m_saveFilenames = "";
+        private int m_countFiles = 0;
+        #endregion
+
         public Form1()
         {
             InitializeComponent();
@@ -124,14 +130,25 @@ namespace FirstStepMulti
                 tSdkCameraDevInfo devInfo;
                 MvApi.CameraGrabber_GetCameraDevInfo(Grabber, out devInfo);
 
+                Encoding myEncoding = Encoding.GetEncoding("utf-8");
+                string sData = myEncoding.GetString(devInfo.acSn);
+                sData=sData.TrimEnd('\0');
+                sData = sData.Substring(0, 12);
+
                 string filename = System.IO.Path.Combine(
                         AppDomain.CurrentDomain.BaseDirectory.ToString(),
-                        string.Format("{0}-{1}-{2}.bmp", System.Environment.TickCount,devInfo.acSn,devInfo.uInstance));
+                        string.Format("{0}-{1}-{2}.jpg", System.Environment.TickCount, sData, devInfo.uInstance));
 
-                MvApi.CameraImage_SaveAsBmp(Image, filename);
+                MvApi.CameraImage_SaveAsJpeg(Image, filename,90);
 
-                MessageBox.Show(filename);
+                m_saveFilenames += filename + "\r\n";
+                m_countFiles ++;
             }
+            if (m_countFiles == 4)
+            {
+                MessageBox.Show(m_saveFilenames);
+            }
+
 
             MvApi.CameraImage_Destroy(Image);
         }
@@ -252,6 +269,9 @@ namespace FirstStepMulti
 
         private void buttonSnapAll_Click(object sender, EventArgs e)
         {
+            m_saveFilenames = "";
+            m_countFiles = 0;
+
             for (int i = 0; i < 4; i++)
             {
                 if (m_Grabber[i] != IntPtr.Zero)
