@@ -106,13 +106,13 @@
             // 
             this.DispWnd1.Location = new System.Drawing.Point(9, 102);
             this.DispWnd1.Name = "DispWnd1";
-            this.DispWnd1.Size = new System.Drawing.Size(355, 314);
+            this.DispWnd1.Size = new System.Drawing.Size(520, 390);
             this.DispWnd1.TabIndex = 5;
             this.DispWnd1.TabStop = false;
             // 
             // buttonSnap2
             // 
-            this.buttonSnap2.Location = new System.Drawing.Point(687, 73);
+            this.buttonSnap2.Location = new System.Drawing.Point(934, 73);
             this.buttonSnap2.Name = "buttonSnap2";
             this.buttonSnap2.Size = new System.Drawing.Size(75, 23);
             this.buttonSnap2.TabIndex = 14;
@@ -122,7 +122,7 @@
             // 
             // buttonStop2
             // 
-            this.buttonStop2.Location = new System.Drawing.Point(594, 73);
+            this.buttonStop2.Location = new System.Drawing.Point(841, 73);
             this.buttonStop2.Name = "buttonStop2";
             this.buttonStop2.Size = new System.Drawing.Size(75, 23);
             this.buttonStop2.TabIndex = 13;
@@ -132,7 +132,7 @@
             // 
             // buttonPlay2
             // 
-            this.buttonPlay2.Location = new System.Drawing.Point(501, 73);
+            this.buttonPlay2.Location = new System.Drawing.Point(748, 73);
             this.buttonPlay2.Name = "buttonPlay2";
             this.buttonPlay2.Size = new System.Drawing.Size(75, 23);
             this.buttonPlay2.TabIndex = 12;
@@ -142,7 +142,7 @@
             // 
             // buttonSettings2
             // 
-            this.buttonSettings2.Location = new System.Drawing.Point(408, 73);
+            this.buttonSettings2.Location = new System.Drawing.Point(655, 73);
             this.buttonSettings2.Name = "buttonSettings2";
             this.buttonSettings2.Size = new System.Drawing.Size(75, 23);
             this.buttonSettings2.TabIndex = 11;
@@ -152,15 +152,15 @@
             // 
             // DispWnd2
             // 
-            this.DispWnd2.Location = new System.Drawing.Point(408, 102);
+            this.DispWnd2.Location = new System.Drawing.Point(655, 102);
             this.DispWnd2.Name = "DispWnd2";
-            this.DispWnd2.Size = new System.Drawing.Size(355, 314);
+            this.DispWnd2.Size = new System.Drawing.Size(520, 390);
             this.DispWnd2.TabIndex = 10;
             this.DispWnd2.TabStop = false;
             // 
             // buttonSnap4
             // 
-            this.buttonSnap4.Location = new System.Drawing.Point(687, 444);
+            this.buttonSnap4.Location = new System.Drawing.Point(934, 545);
             this.buttonSnap4.Name = "buttonSnap4";
             this.buttonSnap4.Size = new System.Drawing.Size(75, 23);
             this.buttonSnap4.TabIndex = 24;
@@ -170,7 +170,7 @@
             // 
             // buttonStop4
             // 
-            this.buttonStop4.Location = new System.Drawing.Point(594, 444);
+            this.buttonStop4.Location = new System.Drawing.Point(841, 545);
             this.buttonStop4.Name = "buttonStop4";
             this.buttonStop4.Size = new System.Drawing.Size(75, 23);
             this.buttonStop4.TabIndex = 23;
@@ -180,7 +180,7 @@
             // 
             // buttonPlay4
             // 
-            this.buttonPlay4.Location = new System.Drawing.Point(501, 444);
+            this.buttonPlay4.Location = new System.Drawing.Point(748, 545);
             this.buttonPlay4.Name = "buttonPlay4";
             this.buttonPlay4.Size = new System.Drawing.Size(75, 23);
             this.buttonPlay4.TabIndex = 22;
@@ -190,7 +190,7 @@
             // 
             // buttonSettings4
             // 
-            this.buttonSettings4.Location = new System.Drawing.Point(408, 444);
+            this.buttonSettings4.Location = new System.Drawing.Point(655, 545);
             this.buttonSettings4.Name = "buttonSettings4";
             this.buttonSettings4.Size = new System.Drawing.Size(75, 23);
             this.buttonSettings4.TabIndex = 21;
@@ -200,15 +200,15 @@
             // 
             // DispWnd4
             // 
-            this.DispWnd4.Location = new System.Drawing.Point(408, 473);
+            this.DispWnd4.Location = new System.Drawing.Point(655, 574);
             this.DispWnd4.Name = "DispWnd4";
-            this.DispWnd4.Size = new System.Drawing.Size(355, 314);
+            this.DispWnd4.Size = new System.Drawing.Size(520, 390);
             this.DispWnd4.TabIndex = 20;
             this.DispWnd4.TabStop = false;
             // 
             // buttonSnap3
             // 
-            this.buttonSnap3.Location = new System.Drawing.Point(288, 444);
+            this.buttonSnap3.Location = new System.Drawing.Point(288, 545);
             this.buttonSnap3.Name = "buttonSnap3";
             this.buttonSnap3.Size = new System.Drawing.Size(75, 23);
             this.buttonSnap3.TabIndex = 19;
@@ -218,7 +218,7 @@
             // 
             // buttonStop3
             // 
-            this.buttonStop3.Location = new System.Drawing.Point(195, 444);
+            this.buttonStop3.Location = new System.Drawing.Point(195, 545);
             this.buttonStop3.Name = "buttonStop3";
             this.buttonStop3.Size = new System.Drawing.Size(75, 23);
             this.buttonStop3.TabIndex = 18;
@@ -228,7 +228,7 @@
             // 
             // buttonPlay3
             // 
-            this.buttonPlay3.Location = new System.Drawing.Point(102, 444);
+            this.buttonPlay3.Location = new System.Drawing.Point(102, 545);
             this.buttonPlay3.Name = "buttonPlay3";
             this.buttonPlay3.Size = new System.Drawing.Size(75, 23);
             this.buttonPlay3.TabIndex = 17;
@@ -238,7 +238,7 @@
             // 
             // buttonSettings3
             // 
-            this.buttonSettings3.Location = new System.Drawing.Point(9, 444);
+            this.buttonSettings3.Location = new System.Drawing.Point(9, 545);
             this.buttonSettings3.Name = "buttonSettings3";
             this.buttonSettings3.Size = new System.Drawing.Size(75, 23);
             this.buttonSettings3.TabIndex = 16;
@@ -248,16 +248,16 @@
             // 
             // DispWnd3
             // 
-            this.DispWnd3.Location = new System.Drawing.Point(9, 473);
+            this.DispWnd3.Location = new System.Drawing.Point(9, 574);
             this.DispWnd3.Name = "DispWnd3";
-            this.DispWnd3.Size = new System.Drawing.Size(355, 314);
+            this.DispWnd3.Size = new System.Drawing.Size(520, 390);
             this.DispWnd3.TabIndex = 15;
             this.DispWnd3.TabStop = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 419);
+            this.label1.Location = new System.Drawing.Point(7, 511);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 25;
@@ -266,7 +266,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(406, 419);
+            this.label2.Location = new System.Drawing.Point(653, 511);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 26;
@@ -275,7 +275,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 792);
+            this.label3.Location = new System.Drawing.Point(12, 976);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 27;
@@ -284,7 +284,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(406, 790);
+            this.label4.Location = new System.Drawing.Point(653, 976);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 12);
             this.label4.TabIndex = 28;
@@ -320,7 +320,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 810);
+            this.ClientSize = new System.Drawing.Size(1184, 1010);
             this.Controls.Add(this.buttonBeginRecord);
             this.Controls.Add(this.buttonSnapAll);
             this.Controls.Add(this.label4);
@@ -347,6 +347,8 @@
             this.Controls.Add(this.buttonPlay1);
             this.Controls.Add(this.buttonSettings1);
             this.Controls.Add(this.DispWnd1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);

@@ -371,7 +371,7 @@ namespace FirstStepMulti
             foreach (int Fmt in FormatList)
             {
                 //status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 100, 30);
-                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 50, 5);
+                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 30, 25);
                 if (status == 0) break;
             }
             return status;
