@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstStepMulti", "FirstStep
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Record", "Record\Record.csproj", "{25C8E26E-C588-476D-8CC4-0997FE012122}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture", "CameraCapture\CameraCapture.csproj", "{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,15 @@ Global
 		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|x86.ActiveCfg = Release|x86
 		{25C8E26E-C588-476D-8CC4-0997FE012122}.Release|x86.Build.0 = Release|x86
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Halcon12_release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Halcon12_release|Any CPU.Build.0 = Release|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Halcon12_release|x86.ActiveCfg = Release|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F6B97F8-7EA6-4B5D-9A5D-F5581505C303}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,14 +7,19 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.IO;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
+using Emgu.Util;
 using MVSDK;//使用SDK接口
 using CameraHandle = System.Int32;
 using MvApi = MVSDK.MvApi;
-using System.IO;
+
 
 namespace FirstStepMulti
 {
-    public partial class Form1 : Form
+    public partial class Form2 : Form
     {
         #region variable
 
@@ -33,7 +38,7 @@ namespace FirstStepMulti
         private int m_countFiles = 0;
         #endregion
 
-        public Form1()
+        public Form2()
         {
             InitializeComponent();
 
@@ -89,6 +94,13 @@ namespace FirstStepMulti
             ref tSdkFrameHead pFrameHead,
             IntPtr Context)
         {
+
+            MIplImage IpImg = (MIplImage)Marshal.PtrToStructure(pFrameBuffer, typeof(MIplImage));
+            //Mat mat = MIpImg.
+            Mat mat = CvInvoke.CvArrToMat(IpImg.ImageData);
+            captureImageBox.Image = mat;
+
+
             if (m_bRecording)
             {
                 MvApi.CameraPushFrame(m_hCamera[0], pFrameBuffer, ref pFrameHead);
@@ -372,7 +384,7 @@ namespace FirstStepMulti
             foreach (int Fmt in FormatList)
             {
                 //status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 100, 30);
-                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 30, 25);
+                status = MvApi.CameraInitRecord(m_hCamera, Fmt, SavePath, 0, 50, 5);
                 if (status == 0) break;
             }
             return status;
